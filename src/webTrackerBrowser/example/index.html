@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script src="../../../dist/tls_browser.js"></script>
+<script>
+  const wtb = new TLS_Browser.WebTrackerBrowser({
+    host: 'your host',
+    protocol: 'https',
+    projectId: 'xxx',
+    topicId: 'xxx',
+  });
+
+  wtb.send({
+    key1: 'key1',
+    key2: 'key2',
+    key3: 'key3',
+  })
+
+  wtb.sendImmediate({
+    key: '1',
+  }).then(() => {
+    console.log('success');
+  });
+
+  wtb.sendImmediate({
+    key1: '1',
+    key2: '2',
+    key3: '3',
+  }).then(() => {
+    console.log('success');
+  });
+  wtb.sendBatchLogs([{
+    key: '1',
+  }, {
+    test: '2',
+  }, {
+    test: '2',
+  }, {
+    test: '2',
+  }, {
+    test: '2',
+  }, {
+    test: '2',
+  }]);
+</script>
+<a href="https://www.baidu.com">fetch keepalive</a>
+</body>
+</html>

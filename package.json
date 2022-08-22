@@ -1,0 +1,102 @@
+{
+  "description": "tls js sdk",
+  "version": "0.0.1",
+  "keywords": [
+    "browser",
+    "tls",
+    "js",
+    "sdk"
+  ],
+  "types": "index.d.ts",
+  "main": "dist/cj/index.js",
+  "module": "dist/es/index.js",
+  "name": "@volcengine/tls-js-sdk",
+  "jest": {
+    "coverageDirectory": "./coverage/",
+    "collectCoverage": true,
+    "verbose": true,
+    "testTimeout": 90000,
+    "transform": {
+      "^.+\\.(ts|js)x?$": "ts-jest"
+    },
+    "preset": "ts-jest/presets/js-with-ts",
+    "moduleNameMapper": {
+      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/test/__mocks__/fileMock.ts",
+      "\\.(css|less)$": "<rootDir>/test/__mocks__/styleMock.ts"
+    },
+    "moduleDirectories": [
+      "node_modules"
+    ],
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "jsx",
+      "ts",
+      "tsx",
+      "node",
+      "d.ts"
+    ],
+    "testEnvironment": "jsdom",
+    "transformIgnorePatterns": [
+      "/node_modules/"
+    ],
+    "globals": {
+      "ts-jest": {
+        "useESM": true
+      }
+    }
+  },
+  "browserslist": [
+    "> 1%",
+    "last 10 version",
+    "not dead",
+    "ie >= 9"
+  ],
+  "scripts": {
+    "clean": "rm -rf dist",
+    "prebuild": "concurrently \"npm run clean\"",
+    "build:cj": "cross-env NODE_ENV=cj babel --extensions \".ts,.tsx,.js\" --presets @babel/preset-typescript src --out-dir dist/cj",
+    "build:es": "babel --extensions \".ts,.tsx,.js\" --presets @babel/preset-typescript src --out-dir dist/es",
+    "build:umd": "rollup --config rollup.config.js --environment NODE_ENV:production",
+    "build": "concurrently -m 6 'npm:build:*'",
+    "test": "jest --no-cache --maxWorkers 2"
+  },
+  "devDependencies": {
+    "@babel/cli": "~7.13.10",
+    "@babel/core": "~7.13.10",
+    "@babel/preset-env": "~7.13.10",
+    "@babel/preset-typescript": "~7.16.7",
+    "@rollup/plugin-babel": "~5.3.0",
+    "@rollup/plugin-commonjs": "~21.0.1",
+    "@rollup/plugin-node-resolve": "^13.3.0",
+    "@rollup/plugin-typescript": "^8.3.4",
+    "@testing-library/jest-dom": "~5.16.4",
+    "@types/jest": "~24.0.25",
+    "@typescript-eslint/eslint-plugin": "~4.28.4",
+    "@typescript-eslint/parser": "~4.22.0",
+    "concurrently": "~7.0.0",
+    "cross-env": "~5.2.1",
+    "eslint": "~7.31.0",
+    "eslint-config-airbnb-base": "~14.2.1",
+    "eslint-config-prettier": "~6.11.0",
+    "eslint-import-resolver-alias": "~1.1.2",
+    "eslint-plugin-import": "~2.23.4",
+    "eslint-plugin-jest": "~24.4.0",
+    "jest": "~27.0.6",
+    "rollup": "~2.67.3",
+    "rollup-plugin-terser": "~7.0.2",
+    "ts-jest": "~27.0.3",
+    "typescript": "~4.7.4"
+  },
+  "files": [
+    "dist/es",
+    "dist/cj",
+    "dist/umd",
+    "dist/tls_browser.js",
+    "package.json",
+    "index.d.ts",
+    "Open Source Notice.txt",
+    "README.md",
+    "README.zh_CN.md"
+  ]
+}
