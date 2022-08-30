@@ -82,7 +82,7 @@ class WebTracker {
     try {
       return JSON.stringify(obj);
     } catch (err) {
-      return ''
+      return `${obj}`
     }
   }
 
@@ -189,6 +189,19 @@ class WebTracker {
     return output;
   }
 
+  transformObjValueToString = (obj: Record<string, any>) => {
+    const newObj: Record<string, string> = {};
+    for (const i in obj) {
+      const v = obj[i];
+      if (typeof v !== 'string') {
+        newObj[i] = this.jsonStringify(v);
+      } else {
+        newObj[i] = v;
+      }
+    }
+    return newObj;
+  }
+
   sendBatchLogsImmediateInner = () => {
     clearTimeout(this.timer);
     this.timer = -1;
@@ -237,6 +250,13 @@ class WebTracker {
     }
   }
 
+  pushLogs = (data: MultiLogsReq) => {
+    const newData = (data || []).map((d) => {
+      return this.transformObjValueToString(d);
+    });
+    this.logs.push(...newData);
+  }
+
 
   send = (data: SingleLogReq, options?: AsyncBatchLogsConfigOptions) => {
     this.sendBatchLogs([data], options);
@@ -247,12 +267,12 @@ class WebTracker {
   }
 
   sendBatchLogs = (data: MultiLogsReq, options?: AsyncBatchLogsConfigOptions) => {
-    this.logs.push(...(data || []));
+    this.pushLogs(data);
     return this.sendBatchLogsInner(options || {});
   }
 
   sendBatchLogsImmediate = (data: MultiLogsReq) => {
-    this.logs.push(...(data || []));
+    this.pushLogs(data);
     return this.sendBatchLogsImmediateInner();
   }
 }

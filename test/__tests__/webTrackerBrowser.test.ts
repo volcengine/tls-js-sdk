@@ -12,6 +12,7 @@ describe('webTrackerBrowser test', () => {
     await wtb.send({
       single_1: '1',
       single_2: '2',
+      price: 1000,
     })
   });
 
