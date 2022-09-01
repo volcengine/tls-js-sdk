@@ -38,8 +38,8 @@ class WebTracker {
   constructor(opt: WebTrackerOptions) {
     this.host = opt.host;
     this.protocol = opt.protocol ?? 'https';
-    this.time = opt.time ?? 10;
-    this.count = opt.time ?? 10;
+    this.time = this.correctTimeAndCount(opt.time);
+    this.count = this.correctTimeAndCount(opt.count);
     this.timer = -1;
     this.projectId = opt.projectId;
     this.topicId = opt.topicId;
@@ -47,6 +47,14 @@ class WebTracker {
     this.logs = [];
     this.headers = opt.headers ?? {};
     this.compressType = 'lz4';
+  }
+
+  correctTimeAndCount = (num: any) => {
+    if (typeof num !== 'number') return 10;
+    if (num < 1 || num > 20) {
+      return 10
+    }
+    return num;
   }
 
   objToQuery = (obj?: Record<string, any>) => {
