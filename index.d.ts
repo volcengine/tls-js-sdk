@@ -33,8 +33,8 @@ export interface WebTrackBrowserOptions extends WebTrackerOptions {
 
 export class WebTrackerBrowser {
   constructor(options: WebTrackBrowserOptions);
-  send: (data: SingleLogReq) => Promise<any>;
-  sendImmediate: (data: SingleLogReq) => void;
+  send: (data: SingleLogReq, options?: AsyncBatchLogsConfigOptions) => void;
+  sendImmediate: (data: SingleLogReq) => Promise<any>;
   sendBatchLogs: (data: MultiLogsReq, options?: AsyncBatchLogsConfigOptions) => void;
   sendBatchLogsImmediate: (data: MultiLogsReq) => Promise<any>;
 }
