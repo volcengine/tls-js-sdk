@@ -9,8 +9,9 @@ class WebTrackerBrowser extends WebTracker {
   constructor(opt: WebTrackBrowserOptions) {
     super(opt);
     window.addEventListener('beforeunload', () => {
-
-      this.sendBatchLogsImmediateInner();
+      if (this.logs.length) {
+        this.sendBatchLogsImmediateInner();
+      }
     });
   }
 }
