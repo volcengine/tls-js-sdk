@@ -32,7 +32,7 @@ class WebTracker {
   logs: Record<string, any>[];
   projectId: string;
   topicId: string;
-  source: string;
+  source?: string;
   compressType: CompressType;
 
   constructor(opt: WebTrackerOptions) {
@@ -43,7 +43,7 @@ class WebTracker {
     this.timer = -1;
     this.projectId = opt.projectId;
     this.topicId = opt.topicId;
-    this.source = opt.source ?? '';
+    this.source = opt.source;
     this.logs = [];
     this.headers = opt.headers ?? {};
     this.compressType = 'lz4';
@@ -181,12 +181,6 @@ class WebTracker {
     }
     return this.requestByXHR(options);
   }
-
-  genNewData = () => ({
-    Source: this.source,
-    TopicId: this.topicId,
-    ProjectId: this.projectId,
-  })
 
   lz4Compress = (input: string) => {
     const innerInput = lz4.Buffer.from(input);
