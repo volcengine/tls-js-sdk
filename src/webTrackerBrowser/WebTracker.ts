@@ -43,7 +43,7 @@ class WebTracker {
     this.timer = -1;
     this.projectId = opt.projectId;
     this.topicId = opt.topicId;
-    this.source = opt.source;
+    this.source = opt.source ?? '@volcengine/tls-js-sdk/webtracking';
     this.logs = [];
     this.headers = opt.headers ?? {};
     this.compressType = 'lz4';
@@ -97,7 +97,7 @@ class WebTracker {
   handleRequestOptions = (options: RequestOptions) => {
     const { url, method, params } = options;
     let body: any = this.jsonStringify(options.body);
-    const originBodyLength = body?.length;
+    const originBodyLength = lz4.Buffer.from(body).length;
     let lz4CompressError = false;
     try {
       body = this.lz4Compress(body);
