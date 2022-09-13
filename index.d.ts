@@ -13,21 +13,9 @@ export interface WebTrackerOptions {
 }
 
 export interface SingleLogReq {
-  // ProjectId?: string;
-  // TopicId?: string;
-  // Source?: string;
-  // CompressType?: CompressType;
-  // Log: Record<string, string>;
-  [index:string]: string;
-}
 
-// export interface MultiLogsReq {
-//   ProjectId?: string;
-//   TopicId?: string;
-//   Source?: string;
-//   Logs: Record<string, any>[];
-//   CompressType?: CompressType;
-// }
+  [index:string]: any;
+}
 
 export type MultiLogsReq = Record<string, any>[]
 
@@ -45,7 +33,8 @@ export interface WebTrackBrowserOptions extends WebTrackerOptions {
 
 export class WebTrackerBrowser {
   constructor(options: WebTrackBrowserOptions);
-  sendLog: (data: SingleLogReq) => Promise<any>;
+  send: (data: SingleLogReq, options?: AsyncBatchLogsConfigOptions) => void;
+  sendImmediate: (data: SingleLogReq) => Promise<any>;
   sendBatchLogs: (data: MultiLogsReq, options?: AsyncBatchLogsConfigOptions) => void;
   sendBatchLogsImmediate: (data: MultiLogsReq) => Promise<any>;
 }

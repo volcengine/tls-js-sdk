@@ -32,21 +32,29 @@ class WebTracker {
   logs: Record<string, any>[];
   projectId: string;
   topicId: string;
-  source: string;
+  source?: string;
   compressType: CompressType;
 
   constructor(opt: WebTrackerOptions) {
     this.host = opt.host;
     this.protocol = opt.protocol ?? 'https';
-    this.time = opt.time ?? 10;
-    this.count = opt.time ?? 10;
+    this.time = this.correctTimeAndCount(opt.time);
+    this.count = this.correctTimeAndCount(opt.count);
     this.timer = -1;
     this.projectId = opt.projectId;
     this.topicId = opt.topicId;
-    this.source = opt.source ?? '';
+    this.source = opt.source ?? '@volcengine/tls-js-sdk/webtracking';
     this.logs = [];
     this.headers = opt.headers ?? {};
     this.compressType = 'lz4';
+  }
+
+  correctTimeAndCount = (num: any) => {
+    if (typeof num !== 'number') return 10;
+    if (num < 1 || num > 20) {
+      return 10
+    }
+    return num;
   }
 
   objToQuery = (obj?: Record<string, any>) => {
@@ -82,14 +90,14 @@ class WebTracker {
     try {
       return JSON.stringify(obj);
     } catch (err) {
-      return ''
+      return `${obj}`
     }
   }
 
   handleRequestOptions = (options: RequestOptions) => {
     const { url, method, params } = options;
     let body: any = this.jsonStringify(options.body);
-    const originBodyLength = body?.length;
+    const originBodyLength = lz4.Buffer.from(body).length;
     let lz4CompressError = false;
     try {
       body = this.lz4Compress(body);
@@ -174,12 +182,6 @@ class WebTracker {
     return this.requestByXHR(options);
   }
 
-  genNewData = () => ({
-    Source: this.source,
-    TopicId: this.topicId,
-    ProjectId: this.projectId,
-  })
-
   lz4Compress = (input: string) => {
     const innerInput = lz4.Buffer.from(input);
     let output = lz4.Buffer.alloc(lz4.LZ4.encodeBound(innerInput.length));
@@ -187,6 +189,19 @@ class WebTracker {
     output = output.slice(0, compressedSize);
     if (!compressedSize) throw new Error('no need to compress');
     return output;
+  }
+
+  transformObjValueToString = (obj: Record<string, any>) => {
+    const newObj: Record<string, string> = {};
+    for (const i in obj) {
+      const v = obj[i];
+      if (typeof v !== 'string') {
+        newObj[i] = this.jsonStringify(v);
+      } else {
+        newObj[i] = v;
+      }
+    }
+    return newObj;
   }
 
   sendBatchLogsImmediateInner = () => {
@@ -237,6 +252,13 @@ class WebTracker {
     }
   }
 
+  pushLogs = (data: MultiLogsReq) => {
+    const newData = (data || []).map((d) => {
+      return this.transformObjValueToString(d);
+    });
+    this.logs.push(...newData);
+  }
+
 
   send = (data: SingleLogReq, options?: AsyncBatchLogsConfigOptions) => {
     this.sendBatchLogs([data], options);
@@ -247,12 +269,12 @@ class WebTracker {
   }
 
   sendBatchLogs = (data: MultiLogsReq, options?: AsyncBatchLogsConfigOptions) => {
-    this.logs.push(...(data || []));
+    this.pushLogs(data);
     return this.sendBatchLogsInner(options || {});
   }
 
   sendBatchLogsImmediate = (data: MultiLogsReq) => {
-    this.logs.push(...(data || []));
+    this.pushLogs(data);
     return this.sendBatchLogsImmediateInner();
   }
 }
