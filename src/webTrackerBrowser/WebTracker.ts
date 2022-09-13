@@ -132,12 +132,12 @@ class WebTracker {
       cache: 'no-store',
       body: result.body,
       keepalive: true,
-    }).then((response) => {
+    }).then(async (response) => {
       let res: Record<string, any> | string = '';
       try {
-        res = response.json();
+        res = await response.json();
       } catch (err) {
-        res = response.text();
+        res = await response.text();
       }
       if (response.status !== 200) {
         throw new Error(`Status: ${response.status}, Error: ${res}`);
