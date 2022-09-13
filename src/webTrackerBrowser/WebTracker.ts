@@ -140,7 +140,7 @@ class WebTracker {
         res = await response.text();
       }
       if (response.status !== 200) {
-        throw new Error(`Status: ${response.status}, Error: ${res}`);
+        throw new Error(`Status: ${response.status}, Error: ${JSON.stringify(res)}`);
       }
       return res;
     })
