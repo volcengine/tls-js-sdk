@@ -1,5 +1,5 @@
 # TLS JS SDK 
-[中文文档](./README.zh_CN.md)
+[中文文档](https://github.com/volcengine/tls-js-sdk/blob/master/README.zh_CN.md)
 
 This is TLS JS SDK for browser.
 > TLS is short for Tinder Log Service.
