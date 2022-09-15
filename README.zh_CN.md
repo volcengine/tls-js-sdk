@@ -1,5 +1,5 @@
 # TLS JS SDK 
-[English](./README.md)
+[English](https://github.com/volcengine/tls-js-sdk/blob/master/README.md)
 
 这是 TLS 在浏览器中的 js sdk。
 > TLS 是 Tinder Log Service（日志服务） 的简称。
