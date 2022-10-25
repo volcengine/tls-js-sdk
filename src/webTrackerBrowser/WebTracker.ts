@@ -132,7 +132,7 @@ class WebTracker {
       cache: 'no-store',
       body: result.body,
       keepalive: true,
-    }).then(async (response) => {
+    }).then(response => {
       if (response.status !== 200) {
         throw new Error(`Status: ${response.status}`);
       }
